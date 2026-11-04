@@ -1,3 +1,4 @@
+import Shell from 'gi://Shell';
 import St from 'gi://St';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
@@ -138,6 +139,19 @@ class WidgetCanvas {
         const textCSS = buildTextCSS(styleConfig);
 
         if (containerCSS) widgetActor.set_style(containerCSS);
+
+        // Frosted glass: blur whatever is behind the widget (wallpaper) within its allocation
+        const containerStyle = mergeStyles(styleConfig);
+        if (containerStyle.background && containerStyle.backgroundBlur > 0) {
+            widgetActor.add_effect_with_name(
+                'desktop-widgets-blur',
+                new Shell.BlurEffect({
+                    mode: Shell.BlurMode.BACKGROUND,
+                    radius: containerStyle.backgroundBlur,
+                    brightness: 1,
+                }),
+            );
+        }
 
         const childLabel = widgetActor.get_child ? widgetActor.get_child() : null;
         if (childLabel) {

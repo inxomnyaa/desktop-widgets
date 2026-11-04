@@ -235,7 +235,9 @@ function buildBackgroundGroup(style, onStyleChange) {
         multiplier: OPACITY_MULTIPLIER,
     });
 
-    const dependentRows = [colorRow, opacityRow];
+    const blurRow = createSpinRow('Blur', 'backgroundBlur', style, onStyleChange, { lower: 0, upper: 100 });
+
+    const dependentRows = [colorRow, opacityRow, blurRow];
     const isEnabled = style.background ?? DefaultStyle.background;
     const switchRow = new Adw.ActionRow({ title: 'Enable Background' });
     const sw = new Gtk.Switch({ active: isEnabled, valign: Gtk.Align.CENTER });
